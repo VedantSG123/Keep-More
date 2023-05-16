@@ -1,9 +1,12 @@
-import { Box, FormControl, InputAdornment, IconButton, InputBase, Button } from "@mui/material"
+import { Box, FormControl, InputAdornment, IconButton, InputBase, Button, Snackbar } from "@mui/material"
+import { LoadingButton } from '@mui/lab'
+import type { } from '@mui/lab/themeAugmentation'
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { useState } from "react"
+import { useState, Fragment } from "react"
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
+import CloseIcon from '@mui/icons-material/Close'
 
 
 const theme = createTheme({
@@ -56,6 +59,22 @@ const theme = createTheme({
         },
         
       }
+    },
+    MuiLoadingButton:{
+      styleOverrides:{
+        root:{
+          backgroundColor:"#9384D1",
+          boxShadow:"none",
+          width:"100%",
+          textTransform:"none",
+          borderRadius:"32px",
+          padding:"0.5rem 0",
+          
+          ":hover":{
+            backgroundColor:"#666699"
+          }
+        },
+      }
     }
   }
 })
@@ -68,8 +87,54 @@ export default function Login(){
     event.preventDefault()
   }
 
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [message, setMessage] = useState("")
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const handleEmailChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setEmail(e.currentTarget.value)
+  }
+  const handlePasswordChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setPassword(e.currentTarget.value)
+  }
+
+  const handleSubmit = () => {
+    setLoading(true)
+    if( email === "" || password === ""){
+      setMessage("Please enter all Fields")
+      setOpen(true)
+      setLoading(false)
+      return
+    }
+  }
+
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setOpen(false)
+  }
+
+  const action = (
+    <Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </Fragment>
+  )
+
   return <>
   <ThemeProvider theme={theme}>
+    
   <Box>
     <FormControl
        sx={{ 
@@ -88,6 +153,8 @@ export default function Login(){
             </InputAdornment>
           }
           placeholder="Email"
+          value={email}
+          onChange={handleEmailChange}
         />
       </FormControl>
       <FormControl
@@ -114,6 +181,8 @@ export default function Login(){
             </InputAdornment>
           }
           placeholder="Password"
+          value={password}
+          onChange={handlePasswordChange}
         />
       </FormControl>
       <FormControl
@@ -123,9 +192,9 @@ export default function Login(){
         }} 
          variant="filled"
       >
-        <Button variant="contained">
+        <LoadingButton onClick={handleSubmit} loading={loading} variant="contained">
           Login
-        </Button>
+        </LoadingButton>
       </FormControl>
       <FormControl
         sx={{ 
@@ -140,6 +209,13 @@ export default function Login(){
         </Button>
       </FormControl>
     </Box>
+    <Snackbar
+      open={open}
+      autoHideDuration={5000}
+      onClose={handleClose}
+      message={message}
+      action={action}
+    />
   </ThemeProvider>
     
   </>

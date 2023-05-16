@@ -9,14 +9,14 @@ import Typography from '@mui/material/Typography/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery'
 import json2mq from 'json2mq' 
 import Login from './Login'
-import Signup from './Signup';
+import Signup from './Signup'
 
 const theme = createTheme({
   components:{
     MuiTab:{
       styleOverrides:{
         root:{
-          backgroundColor:"rgba(97, 58, 137, 0.26)",
+          backgroundColor:"rgba(97, 58, 137, 0.1)",
           borderRadius:"32px",
           textTransform:"none",
           '&.Mui-selected': {
@@ -24,8 +24,7 @@ const theme = createTheme({
            color:"#fff"
           },
           padding:"1rem 2rem",
-          width:"45%"
-          
+          width:"48%"
         },
       }
     },

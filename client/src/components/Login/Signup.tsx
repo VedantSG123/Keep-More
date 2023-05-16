@@ -1,11 +1,13 @@
-import { Box, FormControl, InputAdornment, IconButton, InputBase, Button } from "@mui/material"
+import { Box, FormControl, InputAdornment, IconButton, InputBase, Snackbar } from "@mui/material"
+import { LoadingButton } from '@mui/lab'
+import type { } from '@mui/lab/themeAugmentation'
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { useState } from "react"
+import { useState, Fragment } from "react"
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import PersonIcon from '@mui/icons-material/Person'
-
+import CloseIcon from '@mui/icons-material/Close'
 
 const theme = createTheme({
   components:{
@@ -56,6 +58,22 @@ const theme = createTheme({
         },
         
       }
+    },
+    MuiLoadingButton:{
+      styleOverrides:{
+        root:{
+          backgroundColor:"#9384D1",
+          boxShadow:"none",
+          width:"100%",
+          textTransform:"none",
+          borderRadius:"32px",
+          padding:"0.5rem 0",
+          
+          ":hover":{
+            backgroundColor:"#666699"
+          }
+        },
+      }
     }
   }
 })
@@ -67,6 +85,69 @@ export default function Signup(){
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
+
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [message, setMessage] = useState("")
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [name, setName] = useState("")
+  const [validatePassword, setValidatePassword] = useState("")
+  const handleEmailChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setEmail(e.currentTarget.value)
+  }
+  const handlePasswordChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setPassword(e.currentTarget.value)
+  }
+  const handleValidatePasswordChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setValidatePassword(e.currentTarget.value)
+  }
+  const handleNameChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setName(e.currentTarget.value)
+  }
+
+
+  const handleSubmit = () => {
+    setLoading(true)
+    if( email === "" || password === "" || name === "" || validatePassword === "" ){
+      setMessage("Please enter all Fields")
+      setOpen(true)
+      setLoading(false)
+      return
+    }
+    if( password !== validatePassword ){
+      setMessage("Passwords do not match")
+      setOpen(true)
+      setLoading(false)
+      return
+    }
+  }
+
+
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setOpen(false)
+  }
+
+  const action = (
+    <Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </Fragment>
+  )
 
   return <>
   <ThemeProvider theme={theme}>
@@ -87,6 +168,8 @@ export default function Signup(){
           </InputAdornment>
         }
         placeholder="Name"
+        value={name}
+        onChange={handleNameChange}
       />
     </FormControl>
     <FormControl
@@ -105,6 +188,8 @@ export default function Signup(){
           </InputAdornment>
         }
         placeholder="Email"
+        value={email}
+        onChange={handleEmailChange}
       />
     </FormControl>
     <FormControl
@@ -131,6 +216,8 @@ export default function Signup(){
           </InputAdornment>
         }
         placeholder="Password"
+        value={validatePassword}
+        onChange={handleValidatePasswordChange}
       />
     </FormControl>
     <FormControl
@@ -157,6 +244,8 @@ export default function Signup(){
           </InputAdornment>
         }
         placeholder="Confirm Password"
+        value={password}
+        onChange={handlePasswordChange}
       />
     </FormControl>
     <FormControl
@@ -166,11 +255,17 @@ export default function Signup(){
       }} 
         variant="filled"
     >
-      <Button variant="contained">
+      <LoadingButton onClick={handleSubmit} loading={loading} variant="contained">
         Sign Up
-      </Button>
+      </LoadingButton>
     </FormControl>
-    
+    <Snackbar
+      open={open}
+      autoHideDuration={5000}
+      onClose={handleClose}
+      message={message}
+      action={action}
+    />
   </Box>
   </ThemeProvider>
   </>
