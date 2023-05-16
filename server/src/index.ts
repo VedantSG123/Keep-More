@@ -1,34 +1,19 @@
 import express from "express"
-import http from "http"
-import socketIO from "socket.io"
+import dotenv from "dotenv"
+import ConnectDB from "./Config/DB"
+import userRoute from './Routes/userRoute'
+import { notFound, errorHandler } from "./Middleware/errorMiddleware"
 
-const port: number = 5000
+dotenv.config()
+ConnectDB()
+const app = express()
+app.use(express.json())
 
-class App {
-  private server: http.Server
-  private port: number
-  private options = {
-    cors: {
-      origin: ["http://localhost:3000"] //change according to your client
-    }
-  }
+app.use("/api/user", userRoute)
+app.use(notFound)
+app.use(errorHandler)
 
-  constructor(port: number) {
-    this.port = port
-    const app = express()
-    this.server = new http.Server(app)
-    const io = new socketIO.Server(this.server, this.options)
-
-    io.on("connection", function(socket:socketIO.Socket){
-      console.log("A USER HAS CONNECTED")
-    })
-  }
-
-  public Start() {
-    this.server.listen(this.port, () => {
-      console.log(`Server listening on port ${this.port}.`)
-    })
-  }
-}
-
-new App(port).Start()
+const PORT = process.env.PORT
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`)
+})
