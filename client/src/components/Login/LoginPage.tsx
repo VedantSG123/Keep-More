@@ -23,7 +23,6 @@ const theme = createTheme({
            backgroundColor:"#9384D1",
            color:"#fff"
           },
-          fontSize:"1.25rem",
           padding:"1rem 2rem",
           width:"45%"
           
@@ -95,8 +94,8 @@ export default function LoginPage() {
               margin:"1rem 0 1.5rem",
               color:"#9384D1"
             }}>
-              <LightbulbIcon sx={{ fontSize: 45 }} />
-              <Typography variant='h3'>
+              <LightbulbIcon sx={{ fontSize: 35 }} />
+              <Typography variant='h4'>
                 Keep More
               </Typography>
           </Box>

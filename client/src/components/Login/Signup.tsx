@@ -50,7 +50,6 @@ const theme = createTheme({
           textTransform:"none",
           borderRadius:"32px",
           padding:"0.5rem 0",
-          fontSize:"1.1rem",
           ":hover":{
             backgroundColor:"#666699"
           }
@@ -174,6 +173,5 @@ export default function Signup(){
     
   </Box>
   </ThemeProvider>
-    
   </>
 }
