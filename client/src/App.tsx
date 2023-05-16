@@ -1,9 +1,12 @@
 import './App.css'
 import { createTheme, ThemeProvider } from '@mui/material'
-import { ReactNode } from 'react'
-import { useAppSelector } from './Redux/hooks'
-import Layout from './components/Layout/Layout'
-import NotesEditor from './components/Notes/NotesEditor/NotesEditor'
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom"
+import LoginPage from './components/Login/LoginPage'
+
+
 
 const theme = createTheme({
   palette: {
@@ -22,25 +25,22 @@ const theme = createTheme({
   }
 })
 
-interface tableProperties {
-  [key: string]: ReactNode
-}
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LoginPage />,
+  },
+])
 
 
-const table:tableProperties = {
-  notes:<NotesEditor />,
-  todo:<div>Todo</div>,
-  trash:<div>Trash</div>
-}
+
 
 function App() {
-  const active = useAppSelector((state) => state.current.value)
+  
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Layout>
-          {table[active]}
-        </Layout>
+        <RouterProvider router={router} />
       </ThemeProvider>
     </>
   )
