@@ -71,7 +71,6 @@ export default function LoginPage() {
         height:"100vh",
         display:"flex",
         justifyContent:"center",
-        alignItems:"center",
         boxSizing:"border-box",
         padding:`${matches ? "60px" : "60px 16px"}`
       }}>
@@ -83,7 +82,7 @@ export default function LoginPage() {
             boxSizing:"border-box",
             padding:`${matches ? "2rem" : "2rem 16px"}`,
             borderRadius:"24px",
-            transform:"translateY(-15%)"
+           
           }}>
             <Box sx={{
               display: "flex",
@@ -112,7 +111,6 @@ export default function LoginPage() {
             </TabPanel>
           </Box>
         </ThemeProvider>
-        
       </Box>
     </>
   )

@@ -8,6 +8,9 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
 import PersonIcon from '@mui/icons-material/Person'
 import CloseIcon from '@mui/icons-material/Close'
+import axios, { AxiosResponse } from "axios"
+import { useNavigate } from "react-router-dom"
+import { createImageFromInitials } from "../../Utilities/profileImage"
 
 const theme = createTheme({
   components:{
@@ -111,8 +114,10 @@ export default function Signup(){
     setName(e.currentTarget.value)
   }
 
+  const navigate = useNavigate()
 
-  const handleSubmit = () => {
+
+  const handleSubmit = async() => {
     setLoading(true)
     if( email === "" || password === "" || name === "" || validatePassword === "" ){
       setMessage("Please enter all Fields")
@@ -125,6 +130,48 @@ export default function Signup(){
       setOpen(true)
       setLoading(false)
       return
+    }
+
+    const profilePic = createImageFromInitials(120, name)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    try{
+
+      const response:AxiosResponse = await axios.post("http://localhost:5000/api/user/", {
+        name,
+        email,
+        password,
+        picture:profilePic
+      }, config)
+
+      localStorage.setItem("userInfo", JSON.stringify(response))
+
+      setMessage("Registration Successful")
+      setOpen(true)
+      setLoading(false)
+      navigate("/home")
+
+    }catch(err){
+      if(axios.isAxiosError(err)){
+        if(err.response?.data.message){
+          setMessage(err.response.data.message)
+          setOpen(true)
+          setLoading(false)
+        }
+        else if(err.request){
+          setMessage("No Response From the server")
+          setOpen(true)
+          setLoading(false)
+        }
+      }else{
+        setMessage("Unknown Error")
+        setOpen(true)
+        setLoading(false)
+      }
     }
   }
 

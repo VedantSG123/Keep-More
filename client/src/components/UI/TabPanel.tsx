@@ -1,5 +1,4 @@
 import * as React from 'react'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 
 interface TabPanelProps {
@@ -21,7 +20,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box sx={{ pt:3, boxSizing:"border-box" }}>
-          <Typography>{children}</Typography>
+         {children}
         </Box>
       )}
     </div>

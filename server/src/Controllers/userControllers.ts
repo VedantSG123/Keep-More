@@ -2,9 +2,10 @@ import asynchandler from "express-async-handler"
 import { Request, Response, NextFunction } from "express"
 import { User } from "../Models/userModel"
 import generateToken from "../Config/generateToken"
+import { defaultPic } from "../Public/defaultPicture"
 
 const registerUser = asynchandler(async(req:Request, res:Response) => {
-  const { name, email, password } = req.body
+  const { name, email, password, picture } = req.body
   if(!name || !email || !password){
     res.status(400)
     throw new Error("Please enter all fields")
@@ -16,16 +17,20 @@ const registerUser = asynchandler(async(req:Request, res:Response) => {
     throw new Error("User with this email already exists")
   }
 
+  const pic = picture ? picture : defaultPic
+
   const user =await User.create({
     name,
     email,
-    password
+    password,
+    picture:pic
   })
   if(user){
     res.status(201).json({
       _id:user._id,
       name:user.name,
       email:user.email,
+      picture:user.picture,
       token:generateToken(user._id)
     })
   }else{
@@ -48,6 +53,7 @@ const authUser = asynchandler(async (req:Request, res:Response) => {
       _id:user._id,
       name:user.name,
       email:user.email,
+      picture:user.picture,
       token:generateToken(user._id)
     })
   }

@@ -3,6 +3,8 @@ import { LoadingButton } from '@mui/lab'
 import type { } from '@mui/lab/themeAugmentation'
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { useState, Fragment } from "react"
+import axios, { AxiosResponse } from "axios"
+import { useNavigate } from "react-router-dom"
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined'
@@ -102,7 +104,9 @@ export default function Login(){
     setPassword(e.currentTarget.value)
   }
 
-  const handleSubmit = () => {
+  const navigate = useNavigate()
+
+  const handleSubmit = async() => {
     setLoading(true)
     if( email === "" || password === ""){
       setMessage("Please enter all Fields")
@@ -110,6 +114,48 @@ export default function Login(){
       setLoading(false)
       return
     }
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+
+    try{
+
+      const response:AxiosResponse = await axios.post("http://localhost:5000/api/user/login", {
+        email,
+        password,
+      }, config)
+
+      localStorage.setItem("userInfo", JSON.stringify(response))
+
+      setMessage("Login Successful")
+      setOpen(true)
+      setLoading(false)
+      navigate("/home")
+
+    }catch(err){
+
+      if(axios.isAxiosError(err)){
+        if(err.response?.data.message){
+          setMessage(err.response.data.message)
+          setOpen(true)
+          setLoading(false)
+        }
+        else if(err.request){
+          setMessage("No Response From the server")
+          setOpen(true)
+          setLoading(false)
+        }
+      }else{
+        setMessage("Unknown Error")
+        setOpen(true)
+        setLoading(false)
+      }
+
+    }
+
   }
 
   const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
@@ -156,6 +202,7 @@ export default function Login(){
           value={email}
           onChange={handleEmailChange}
         />
+
       </FormControl>
       <FormControl
        sx={{ 
@@ -184,6 +231,7 @@ export default function Login(){
           value={password}
           onChange={handlePasswordChange}
         />
+
       </FormControl>
       <FormControl
         sx={{ 
