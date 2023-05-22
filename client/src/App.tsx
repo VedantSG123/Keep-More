@@ -8,12 +8,17 @@ import LoginPage from './components/Login/LoginPage'
 import ErrorPage from './components/Error/ErrorPage'
 import Home from './components/Home/Home'
 
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    materialu: true;
+  }
+}
 
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#5432D3"
+      main:"#673ab7",
     },
     secondary: {
       main: "#fb3782"
@@ -24,6 +29,15 @@ const theme = createTheme({
       '"Open Sans"',
       'sans-serif'
     ].join(",")
+  },
+  components:{
+    MuiButton:{
+      styleOverrides:{
+        root:{
+          borderRadius:"100px"
+        }
+      }
+    }
   }
 })
 

@@ -19,7 +19,7 @@ export default function NotesEditor(){
     [{ 'align': [] }],
     ['image']
   ]
-  const [quill, setQuill] = useState<Quill>()
+  const [quill, setQuill] = useState<Quill>() 
 
   
 

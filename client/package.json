@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.129",
     "@mui/material": "^5.13.0",
+    "@mui/material-next": "^6.0.0-alpha.85",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
     "json2mq": "^0.2.0",

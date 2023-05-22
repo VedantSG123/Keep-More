@@ -33,4 +33,4 @@ userModel.pre<IUser>("save", async function(next){
 })
 
 const User = mongoose.model("User", userModel)
-export { User }
+export { User, IUser }
