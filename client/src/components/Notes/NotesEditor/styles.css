@@ -1,0 +1,11 @@
+.editor-tile-state{
+  cursor:pointer;
+}
+
+.editor-tile-state *{
+  cursor:pointer;
+}
+
+.editor-tile-state .ql-editor{
+  overflow:hidden;
+}

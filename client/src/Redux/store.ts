@@ -1,9 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit'
-import currentReducer from './currentSlice'
+import { configureStore } from "@reduxjs/toolkit"
+import currentReducer from "./currentSlice"
+import editorReducer from "./editorSlice"
 
 const store = configureStore({
   reducer: {
-    current:currentReducer
+    current: currentReducer,
+    editorConent: editorReducer,
   },
 })
 

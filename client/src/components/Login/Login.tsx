@@ -133,7 +133,7 @@ export default function Login(){
       setMessage("Login Successful")
       setOpen(true)
       setLoading(false)
-      navigate("/home")
+      navigate("/")
 
     }catch(err){
 

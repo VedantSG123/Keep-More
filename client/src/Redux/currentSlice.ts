@@ -1,23 +1,21 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-
-
-interface currentState{
-  value:string
+interface currentState {
+  value: string
 }
 
-const initialState:currentState = {
-  value:"notes"
+const initialState: currentState = {
+  value: "notes",
 }
 
 export const currentSlice = createSlice({
-  name:"current",
+  name: "current",
   initialState,
-  reducers:{
-    setCurrent:(state, action:PayloadAction<string>) => {
+  reducers: {
+    setCurrent: (state, action: PayloadAction<string>) => {
       state.value = action.payload
-    }
-  }
+    },
+  },
 })
 
 export const { setCurrent } = currentSlice.actions

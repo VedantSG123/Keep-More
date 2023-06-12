@@ -3,29 +3,27 @@ import bcrypt from "bcrypt"
 
 interface IUser extends mongoose.Document {
   password: string
-  name:string
-  email:string
-  picture:string
-  matchPassword(password:string):boolean
+  name: string
+  email: string
+  matchPassword(password: string): boolean
 }
 
 const userModel = new mongoose.Schema<IUser>(
   {
-    name:{type:String, required:true},
-    email:{type:String, required:true, unique:true},
-    password:{type:String, required:true},
-    picture:{type:String}
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
   },
-  {timestamps:true}
+  { timestamps: true }
 )
 
-userModel.methods.matchPassword = async function(enteredPassword:string){
+userModel.methods.matchPassword = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword, this.password)
 }
 
-userModel.pre<IUser>("save", async function(next){
+userModel.pre<IUser>("save", async function (next) {
   const user = this
-  if(!user.isModified()){
+  if (!user.isModified()) {
     next()
   }
   const salt = await bcrypt.genSalt(10)

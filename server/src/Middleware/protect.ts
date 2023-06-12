@@ -20,6 +20,7 @@ const protect = asyncHandler(
 
         const user = await User.findOne(decode._id).select("-password")
         if (!user) {
+          res.status(401)
           throw new Error("User not found")
         }
 

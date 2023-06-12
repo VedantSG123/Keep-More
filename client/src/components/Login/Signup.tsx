@@ -10,7 +10,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import CloseIcon from '@mui/icons-material/Close'
 import axios, { AxiosResponse } from "axios"
 import { useNavigate } from "react-router-dom"
-import { createImageFromInitials } from "../../Utilities/profileImage"
+
 
 const theme = createTheme({
   components:{
@@ -132,7 +132,7 @@ export default function Signup(){
       return
     }
 
-    const profilePic = createImageFromInitials(120, name)
+    
     const config = {
       headers: {
         'Content-Type': 'application/json'
@@ -145,7 +145,6 @@ export default function Signup(){
         name,
         email,
         password,
-        picture:profilePic
       }, config)
 
       localStorage.setItem("userInfo", JSON.stringify(response))
@@ -153,7 +152,7 @@ export default function Signup(){
       setMessage("Registration Successful")
       setOpen(true)
       setLoading(false)
-      navigate("/home")
+      navigate("/")
 
     }catch(err){
       if(axios.isAxiosError(err)){

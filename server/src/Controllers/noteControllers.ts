@@ -16,11 +16,7 @@ const createNote = asynchandler(async (req: AuthRequest, res: Response) => {
     author: author,
   })
   if (note) {
-    res.status(201).json({
-      _id: note._id,
-      author: note.author,
-      title: note.title,
-    })
+    res.status(201).json(note)
   } else {
     res.status(404)
     throw new Error("Failed to Create a Note")

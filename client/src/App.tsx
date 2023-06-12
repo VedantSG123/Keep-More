@@ -43,21 +43,20 @@ const theme = createTheme({
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/login",
     element: <LoginPage />,
-    errorElement:<ErrorPage />
   },
   {
-    path:"/home",
-    element:<Home/>
+    path:"/",
+    element:<Home/>,
+    errorElement:<ErrorPage />
   }
 ])
 
 
 
-
 function App() {
-  
+
   return (
     <>
       <ThemeProvider theme={theme}>

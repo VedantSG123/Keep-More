@@ -1,62 +1,67 @@
 import asynchandler from "express-async-handler"
 import { Request, Response, NextFunction } from "express"
+import { AuthRequest } from "../Middleware/protect"
 import { User } from "../Models/userModel"
 import generateToken from "../Config/generateToken"
 import { defaultPic } from "../Public/defaultPicture"
 
-const registerUser = asynchandler(async(req:Request, res:Response) => {
+const registerUser = asynchandler(async (req: Request, res: Response) => {
   const { name, email, password, picture } = req.body
-  if(!name || !email || !password){
+  if (!name || !email || !password) {
     res.status(400)
     throw new Error("Please enter all fields")
   }
 
-  const userExists = await User.findOne({email})
-  if(userExists){
+  const userExists = await User.findOne({ email })
+  if (userExists) {
     res.status(400)
     throw new Error("User with this email already exists")
   }
 
-  const pic = picture ? picture : defaultPic
-
-  const user =await User.create({
+  const user = await User.create({
     name,
     email,
     password,
-    picture:pic
   })
-  if(user){
+  if (user) {
     res.status(201).json({
-      _id:user._id,
-      name:user.name,
-      email:user.email,
-      picture:user.picture,
-      token:generateToken(user._id)
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
     })
-  }else{
+  } else {
     res.status(400)
     throw new Error("Failed to create User")
   }
 })
 
-
-const authUser = asynchandler(async (req:Request, res:Response) => {
+const authUser = asynchandler(async (req: Request, res: Response) => {
   const { email, password } = req.body
-  if(!email || !password){
+  if (!email || !password) {
     res.status(400)
     throw new Error("Please enter all fields")
   }
-  const user = await User.findOne({email})
+  const user = await User.findOne({ email })
 
-  if(user && (await user.matchPassword(password))){
+  if (user && (await user.matchPassword(password))) {
     res.json({
-      _id:user._id,
-      name:user.name,
-      email:user.email,
-      picture:user.picture,
-      token:generateToken(user._id)
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      token: generateToken(user._id),
     })
   }
 })
 
-export { registerUser, authUser }
+const verifyUser = asynchandler(async (req: AuthRequest, res: Response) => {
+  const user = req.user
+  if (user) {
+    res.json(user)
+  } else {
+    res.status(400)
+    throw new Error("User not found")
+  }
+})
+
+export { registerUser, authUser, verifyUser }

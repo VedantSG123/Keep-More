@@ -3,22 +3,30 @@ import {
   Box,
   Typography,
   Button,
-  Grid
+  Grid,
+  Avatar,
+  IconButton
 } from '@mui/material/'
 import MenuIcon from '@mui/icons-material/Menu'
 import LightbulbIcon from '@mui/icons-material/Lightbulb'
 import json2mq from 'json2mq' 
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { ReactNode, useState, useEffect } from 'react'
+import { stringAvatar } from '../../Utilities/profileImage'
 import Sidebar from '../Sidebar/Sidebar'
 
 
 
 interface properties {
   children: ReactNode
+  user: {
+    _id:string
+    name:string,
+    email:string
+  }
 }
 
-export default function Layout({ children }: properties) {
+export default function Layout({ children, user }: properties) {
 
   const matches = useMediaQuery(
     json2mq({
@@ -43,31 +51,41 @@ export default function Layout({ children }: properties) {
       boxShadow: "none"
     }}>
       <Box sx={{
-        padding: "1rem 0",
+        padding: "0.5rem 0",
         bgcolor: "secondary.main",
         borderRadius: "8px"
       }}>
         <Box sx={{
           display: "flex",
           alignItems: "center",
-
+          justifyContent:"space-between",
+          paddingRight:"1rem"
         }}>
-          <Button variant='text' onClick={MenuClick}>
-            <MenuIcon fontSize='medium' sx={{
-              color: "#fff"
-            }} />
-          </Button>
-
           <Box sx={{
-            display: "flex",
-            alignItems: "center"
+            display:"flex",
+            alignItems:"center"
           }}>
-            <LightbulbIcon fontSize='medium' />
-            <Typography variant='h6'>
-              Keep More
-            </Typography>
-          </Box>
+            <Button variant='text' onClick={MenuClick}>
+              <MenuIcon fontSize='medium' sx={{
+                color: "#fff"
+              }} />
+            </Button>
 
+            <Box sx={{
+              display: "flex",
+              alignItems: "center"
+            }}>
+              <LightbulbIcon fontSize='medium' />
+              <Typography variant='h6'>
+                Keep More
+              </Typography>
+            </Box>
+          </Box>
+          <Box>
+            <IconButton>
+            <Avatar {...stringAvatar(user.name)} />
+            </IconButton>
+          </Box>
         </Box>
       </Box>
     </AppBar>
@@ -79,9 +97,10 @@ export default function Layout({ children }: properties) {
         <Grid item sx={{
           width: `${menu ? "250px" : "0px"}`,
           height: "calc(100vh - 3.5rem)",
-          transition: "all 0.1s ease-in-out",
+          transition: "all 0.3s ease-in-out",
           overflow: "hidden",
-          position: `${matches ? "relative" : "absolute"}`
+          position: `${matches ? "relative" : "absolute"}`,
+          zIndex:999
         }}>
           <Box sx={{
             bgcolor: "#efccff",
